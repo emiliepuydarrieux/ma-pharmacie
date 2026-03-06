@@ -36,7 +36,6 @@ public class MailgunService {
                     + "&subject=" + URLEncoder.encode(subject, "UTF-8")
                     + "&text=" + URLEncoder.encode(text, "UTF-8");
 
-            // On appelle la nouvelle méthode qui n'utilise PLUS curl
             sendViaHttp(mailgunUrl, postData);
 
         } catch (Exception e) {
@@ -50,7 +49,7 @@ public class MailgunService {
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
             // Configuration de l'authentification "Basic" (api:CLE_API)
-            String auth = "api:" + apiKey.trim(); // Le .trim() enlève les espaces invisibles
+            String auth = "api:" + apiKey.trim(); 
 String encodedAuth = Base64.getEncoder().encodeToString(auth.getBytes(StandardCharsets.UTF_8)).replaceAll("\\s", "");
             
             conn.setRequestMethod("POST");
