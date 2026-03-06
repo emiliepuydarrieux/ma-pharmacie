@@ -16,17 +16,27 @@ public class MailgunService {
 
     private static final Logger logger = LoggerFactory.getLogger(MailgunService.class);
 
-    // Ces valeurs seront lues depuis Render
-    @Value("${mailgun.api-key:no-key}")
+    // On demande à Spring de chercher toutes les variantes possibles
+    @Value("${MAILGUN_API_KEY:${mailgun.api-key:no-key}}")
     private String apiKey;
 
-    @Value("${mailgun.domain:no-domain}")
+    @Value("${MAILGUN_DOMAIN:${mailgun.domain:no-domain}}")
     private String domain;
 
-    @Value("${mailgun.from-email:no-email}")
+    @Value("${MAILGUN_FROM_EMAIL:${mailgun.from-email:no-email}}")
     private String fromEmail;
 
     public void sendEmail(String to, String subject, String text) {
+        // LOG DE DEBUG (Vérifie la longueur de ce que Spring a chargé)
+        logger.info("Tentative d'envoi. Longueur de la clé chargée : {}", 
+                    (apiKey != null) ? apiKey.length() : 0);
+
+        if (apiKey == null || apiKey.equals("no-key") || apiKey.length() < 10) {
+            logger.error("ERREUR : La clé API n'est pas chargée correctement !");
+            return;
+        }
+        
+        // ... reste du code avec l'URL US (https://api.mailgun.net/v3/...)
         try {
             // 1. Nettoyage de la clé et du domaine
             String cleanKey = apiKey.trim().replaceAll("\\s", "");
