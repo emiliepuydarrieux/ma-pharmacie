@@ -1,4 +1,4 @@
-package pharmacie.service;
+/* package pharmacie.service;
 
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
@@ -93,5 +93,45 @@ String encodedAuth = Base64.getEncoder().encodeToString(auth.getBytes(StandardCh
         );
         
         sendEmail(fournisseurEmail, subject, text);
+    }
+}
+*/
+package pharmacie.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.stereotype.Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+@Service
+public class MailgunService { // On garde le nom de classe pour ne pas casser tes autres fichiers
+
+    private static final Logger logger = LoggerFactory.getLogger(MailgunService.class);
+
+    @Autowired
+    private JavaMailSender mailSender;
+
+    public void sendEmail(String to, String subject, String text) {
+        try {
+            SimpleMailMessage message = new SimpleMailMessage();
+            // L'expéditeur doit être ton adresse Gmail configurée
+            message.setFrom("ton-email@gmail.com"); 
+            message.setTo(to);
+            message.setSubject(subject);
+            message.setText(text);
+            
+            mailSender.send(message);
+            logger.info("✅ SUCCÈS : Alerte envoyée via Gmail à {}", to);
+        } catch (Exception e) {
+            logger.error("❌ ERREUR GMAIL : {}", e.getMessage());
+        }
+    }
+
+    public void sendAledStockEmail(String fournisseurEmail, String nomMedicament, int unitesEnStock, int niveauDeReappro) {
+        String subject = "🚨 Alerte Stock Bas : " + nomMedicament;
+        String body = "Le stock est critique : " + unitesEnStock + " unités restantes (Seuil : " + niveauDeReappro + ").";
+        sendEmail(fournisseurEmail, subject, body);
     }
 }
