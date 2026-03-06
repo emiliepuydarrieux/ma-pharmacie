@@ -190,8 +190,8 @@ INSERT INTO LIGNE (COMMANDE_NUMERO, MEDICAMENT_REFERENCE, QUANTITE) VALUES
 
 
 -- 1. On crée les 5 fournisseurs
-INSERT INTO fournisseur (id, nom, email) VALUES (1,'Grossiste Alpha', 'emiliepuydarrieux+alpha@gmail.com');
-INSERT INTO fournisseur (id, nom, email) VALUES (2,'Pharmacie Centrale', 'emiliepuydarrieux+centrale@gmail.com');
+INSERT INTO fournisseur (id, nom, email) VALUES (1,'Grossiste Alpha', 'emiliepuydarrieux@gmail.com');
+INSERT INTO fournisseur (id, nom, email) VALUES (2,'Pharmacie Centrale', 'emiliepuydarrieux@gmail.com');
 INSERT INTO fournisseur (id, nom, email) VALUES (3,'Distributeur Médicaux', 'emiliepuydarrieux+distrib@gmail.com');
 INSERT INTO fournisseur (id, nom, email) VALUES (4,'Euro Pharma', 'emiliepuydarrieux+euro@gmail.com');
 INSERT INTO fournisseur (id, nom, email) VALUES (5,'Global Santé', 'emiliepuydarrieux+global@gmail.com');
