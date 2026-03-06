@@ -36,9 +36,9 @@ public class MailgunService {
         String cleanKey = apiKey.trim().replaceAll("\\s", "");
         
         // 2. Configuration (Vérifie bien si c'est api.eu.mailgun.net ou api.mailgun.net)
-        String testDomain = "sandbox0921dcaf1....mailgun.org"; // <--- METS TON DOMAINE COMPLET ICI
+        String testDomain = "sandbox0921dcaf1aca49f4b61a8c7905f871fd.mailgun.org"; // <--- METS TON DOMAINE COMPLET ICI
         String testFrom = "postmaster@" + testDomain;
-        String mailgunUrl = "https://api.mailgun.net/v3/" + testDomain + "/messages";
+        String mailgunUrl = "https://api.eu.mailgun.net/v3/" + testDomain + "/messages";
 
         // 3. Encodage Base64 strict
         String auth = "api:" + cleanKey;
