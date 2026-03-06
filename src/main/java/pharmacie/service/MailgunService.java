@@ -102,4 +102,8 @@ public class MailgunService {
         
         sendEmail(fournisseurEmail, subject, text);
     }
+    logger.info("Tentative avec le domaine : '{}'", domain);
+logger.info("La clé commence par : '{}' et finit par : '{}'", 
+    apiKey.substring(0, Math.min(apiKey.length(), 4)), 
+    apiKey.substring(Math.max(0, apiKey.length() - 2)));
 }
