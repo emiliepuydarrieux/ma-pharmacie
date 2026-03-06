@@ -33,7 +33,7 @@ public class MailgunService {
             String cleanDomain = domain.trim().replaceAll("\\s", "");
             
             // 2. URL de l'API (On garde l'URL EU qui semble être la tienne)
-            String mailgunUrl = "https://api.eu.mailgun.net/v3/" + cleanDomain + "/messages";
+            String mailgunUrl = "https://api.mailgun.net/v3/" + cleanDomain + "/messages";
 
             // 3. Préparation de l'authentification
             String auth = "api:" + cleanKey;
