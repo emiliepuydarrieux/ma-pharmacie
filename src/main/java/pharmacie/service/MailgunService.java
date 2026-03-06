@@ -25,25 +25,36 @@ public class MailgunService {
     @Value("${mailgun.from-email:no-email}")
     private String fromEmail;
 
-    public void sendEmail(String to, String subject, String text) {
+   public void sendEmail(String to, String subject, String text) {
     try {
-        // FORCE LES VALEURS ICI POUR TESTER
-        String testDomain = "sandbox0921dcaf1....mailgun.org"; 
-        String testFrom = "postmaster@sandbox0921dcaf1....mailgun.org";
+        // 1. On s'assure que la clé n'est pas vide et on enlève les espaces
+        if (apiKey == null || apiKey.equals("no-key")) {
+            logger.error("LA CLÉ API EST ABSENTE DES VARIABLES RENDER !");
+            return;
+        }
         
-        String mailgunUrl = "https://api.eu.mailgun.net/v3/" + testDomain + "/messages";
+        String cleanKey = apiKey.trim().replaceAll("\\s", "");
+        
+        // 2. Configuration (Vérifie bien si c'est api.eu.mailgun.net ou api.mailgun.net)
+        String testDomain = "sandbox0921dcaf1....mailgun.org"; // <--- METS TON DOMAINE COMPLET ICI
+        String testFrom = "postmaster@" + testDomain;
+        String mailgunUrl = "https://api.mailgun.net/v3/" + testDomain + "/messages";
+
+        // 3. Encodage Base64 strict
+        String auth = "api:" + cleanKey;
+        byte[] authBytes = auth.getBytes(StandardCharsets.UTF_8);
+        String encodedAuth = Base64.getEncoder().encodeToString(authBytes);
+
         URL url = new URL(mailgunUrl);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-
-        String auth = "api:" + apiKey.trim();
-        String encodedAuth = Base64.getEncoder().encodeToString(auth.getBytes(StandardCharsets.UTF_8));
-
         conn.setRequestMethod("POST");
         conn.setDoOutput(true);
-        conn.setRequestProperty("Authorization", "Basic " + encodedAuth);
+        
+        // IMPORTANT : On enlève tout espace ou retour à la ligne du Base64
+        conn.setRequestProperty("Authorization", "Basic " + encodedAuth.trim());
         conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
 
-        // ON FORCE L'ENVOI À TON ADRESSE VALIDÉE
+        // 4. Préparation des données
         String postData = "from=" + URLEncoder.encode(testFrom, "UTF-8")
                 + "&to=" + URLEncoder.encode("emiliepuydarrieux@gmail.com", "UTF-8")
                 + "&subject=" + URLEncoder.encode(subject, "UTF-8")
@@ -53,11 +64,14 @@ public class MailgunService {
             os.write(postData.getBytes(StandardCharsets.UTF_8));
         }
 
-        logger.info("TEST FORCE - Response Code: {}", conn.getResponseCode());
+        int responseCode = conn.getResponseCode();
+        logger.info("TENTATIVE MAILGUN - Code: {} - URL: {}", responseCode, mailgunUrl);
+
     } catch (Exception e) {
-        logger.error("Erreur: {}", e.getMessage());
+        logger.error("Erreur technique: {}", e.getMessage());
     }
 }
+    
     public void sendAledStockEmail(String fournisseurEmail, String nomMedicament, int unitesEnStock, int niveauDeReappro) {
         String subject = "Alerte Stock";
         String text = "Le medicament " + nomMedicament + " est bas (" + unitesEnStock + ").";
