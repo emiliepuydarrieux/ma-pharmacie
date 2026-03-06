@@ -45,44 +45,43 @@ public class MailgunService {
     }
 
     private void sendViaHttp(String mailgunUrl, String postData) {
-        try {
-            URL url = new URL(mailgunUrl);
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-
-            // Nettoyage de la clé (supprime espaces et sauts de ligne accidentels)
-            String cleanKey = apiKey.trim().replaceAll("\\s", "");
-            
-            // Si la clé ne commence pas par 'key-', on l'ajoute (sécurité)
-            if (!cleanKey.startsWith("key-") && !cleanKey.startsWith("api-")) {
-                cleanKey = "key-" + cleanKey;
-            }
-
-            // Encodage Base64 strict
-            String auth = "api:" + cleanKey;
-            String encodedAuth = Base64.getEncoder().encodeToString(auth.getBytes(StandardCharsets.UTF_8));
-            
-            conn.setRequestMethod("POST");
-            conn.setDoOutput(true);
-            // On force l'en-tête Authorization
-            conn.setRequestProperty("Authorization", "Basic " + encodedAuth);
-            conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-
-            try (OutputStream os = conn.getOutputStream()) {
-                byte[] input = postData.getBytes(StandardCharsets.UTF_8);
-                os.write(input, 0, input.length);
-            }
-
-            int responseCode = conn.getResponseCode();
-            if (responseCode >= 200 && responseCode < 300) {
-                logger.info("Email envoyé avec succès ! (Code: {})", responseCode);
-            } else {
-                logger.warn("Mailgun a refusé l'envoi. Code HTTP: {}. Vérifiez la clé API et le domaine sur Render.", responseCode);
-            }
-
-        } catch (Exception e) {
-            logger.error("Erreur fatale lors de l'envoi HTTP vers Mailgun", e);
+    try {
+        // 1. Sécurité : si la clé est nulle, on arrête tout proprement
+        if (apiKey == null || apiKey.isEmpty()) {
+            logger.error("ERREUR : La clé API Mailgun est vide ! Vérifiez vos variables d'environnement sur Render.");
+            return;
         }
+
+        URL url = new URL(mailgunUrl);
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+
+        // 2. Nettoyage radical de la clé
+        String cleanKey = apiKey.trim();
+        
+        // 3. Construction de l'auth Basic
+        String auth = "api:" + cleanKey;
+        String encodedAuth = Base64.getEncoder().encodeToString(auth.getBytes(StandardCharsets.UTF_8));
+        
+        conn.setRequestMethod("POST");
+        conn.setDoOutput(true);
+        conn.setRequestProperty("Authorization", "Basic " + encodedAuth);
+        conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+
+        try (OutputStream os = conn.getOutputStream()) {
+            os.write(postData.getBytes(StandardCharsets.UTF_8));
+        }
+
+        int responseCode = conn.getResponseCode();
+        if (responseCode >= 200 && responseCode < 300) {
+            logger.info("Email envoyé ! Code: {}", responseCode);
+        } else {
+            logger.warn("Mailgun a refusé l'envoi. Code: {}", responseCode);
+        }
+
+    } catch (Exception e) {
+        logger.error("Erreur lors de l'envoi Mailgun : {}", e.getMessage());
     }
+}
 
     public void sendAledStockEmail(String fournisseurEmail, String nomMedicament, 
                                     int unitesEnStock, int niveauDeReappro) {
