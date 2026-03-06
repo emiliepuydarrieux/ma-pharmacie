@@ -31,7 +31,7 @@ public class MailgunService {
         String testDomain = "sandbox0921dcaf1....mailgun.org"; 
         String testFrom = "postmaster@sandbox0921dcaf1....mailgun.org";
         
-        String mailgunUrl = "https://api.mailgun.net/v3/" + testDomain + "/messages";
+        String mailgunUrl = "https://api.eu.mailgun.net/v3/" + testDomain + "/messages";
         URL url = new URL(mailgunUrl);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
