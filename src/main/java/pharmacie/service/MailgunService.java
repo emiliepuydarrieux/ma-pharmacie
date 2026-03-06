@@ -50,8 +50,8 @@ public class MailgunService {
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
             // Configuration de l'authentification "Basic" (api:CLE_API)
-            String auth = "api:" + apiKey;
-            String encodedAuth = Base64.getEncoder().encodeToString(auth.getBytes(StandardCharsets.UTF_8));
+            String auth = "api:" + apiKey.trim(); // Le .trim() enlève les espaces invisibles
+String encodedAuth = Base64.getEncoder().encodeToString(auth.getBytes(StandardCharsets.UTF_8)).replaceAll("\\s", "");
             
             conn.setRequestMethod("POST");
             conn.setDoOutput(true);
