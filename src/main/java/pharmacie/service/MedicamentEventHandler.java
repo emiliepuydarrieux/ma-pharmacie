@@ -37,11 +37,11 @@ public class MedicamentEventHandler {
         }
     }
 
-    // Petite méthode utilitaire pour éviter de répéter ton adresse mail partout
+    
     private void envoyerMail(String sujet, String corps) {
         try {
             mailgunService.sendEmail(
-                "ton-email-perso@gmail.com", // REMPLACE PAR TON VRAI GMAIL VALIDÉ
+                "emiliepuydarrieux@gmail.com", 
                 "Pharmacie : " + sujet,
                 corps
             );
