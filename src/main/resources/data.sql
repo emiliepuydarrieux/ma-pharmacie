@@ -1,7 +1,4 @@
--- Données de base pour le projet Pharmacie
--- Dispensaire (Etablissements de santé qui passent commande de médicaments)
--- Le fichier est chargé au démarrage de l''application
-DELETE FROM fournisseur_categorie; -- Table de liaison en premier
+DELETE FROM fournisseur_categorie; 
 DELETE FROM LIGNE;
 DELETE FROM COMMANDE;
 DELETE FROM MEDICAMENT;
