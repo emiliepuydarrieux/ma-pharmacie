@@ -1,3 +1,13 @@
+-- Données de base pour le projet Pharmacie
+-- Dispensaire (Etablissements de santé qui passent commande de médicaments)
+-- Le fichier est chargé au démarrage de l''application
+DELETE FROM fournisseur_categorie; -- Table de liaison en premier
+DELETE FROM LIGNE;
+DELETE FROM COMMANDE;
+DELETE FROM MEDICAMENT;
+DELETE FROM DISPENSAIRE;
+DELETE FROM CATEGORIE;
+DELETE FROM fournisseur;
 INSERT INTO CATEGORIE (CODE, LIBELLE, DESCRIPTION) VALUES
 (11, 'Antalgiques et Antipyrétiques', 'Médicaments contre la douleur et la fièvre'),
 (12, 'Anti-inflammatoires', 'Médicaments réduisant l inflammation'),
