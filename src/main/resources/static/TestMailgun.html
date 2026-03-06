@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Mailgun - Alerte Stock</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .section {
+            margin: 20px 0;
+            padding: 15px;
+            border-left: 4px solid #007bff;
+            background-color: #f8f9fa;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 0;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 4px;
+            display: none;
+        }
+        #result.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            display: block;
+        }
+        #result.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            display: block;
+        }
+        .loading {
+            text-align: center;
+            color: #666;
+        }
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #007bff;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 10px auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .info {
+            background-color: #e7f3ff;
+            border-left: 4px solid #2196F3;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        .warning {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Test Mailgun - Alerte Stock Fournisseurs</h1>
+
+        <div class="section">
+            <h2>📋 Fonctionnalité</h2>
+            <p>
+                Cet outil teste l'envoi automatique d'emails aux fournisseurs quand le stock 
+                tombe en dessous du niveau de réapprovisionnement.
+            </p>
+            <p>
+                <strong>Condition :</strong> Si UNITES_EN_STOCK &lt; NIVEAU_DE_REAPPRO → 
+                Email envoyé à chaque fournisseur de cette catégorie
+            </p>
+        </div>
+
+        <div class="info">
+            ℹ️ <strong>Configuration Mailgun :</strong><br>
+            Assurez-vous que les variables d'environnement sont configurées :
+            <ul>
+                <li><code>MAILGUN_API_KEY</code></li>
+                <li><code>MAILGUN_DOMAIN</code></li>
+                <li><code>MAILGUN_FROM_EMAIL</code></li>
+            </ul>
+        </div>
+
+        <div class="section">
+            <h2>🚀 Déclencher les Alertes</h2>
+            <p>Cliquez sur le bouton pour vérifier tous les médicaments et envoyer les alertes :</p>
+            <button onclick="checkStock()">✉️ Vérifier Stock et Envoyer Alertes</button>
+        </div>
+
+        <div id="result" role="alert">
+            <div id="resultContent"></div>
+        </div>
+
+        <div class="section">
+            <h2>📊 Informations de Test</h2>
+            <div class="warning">
+                <strong>⚠️ Données de test actuelles :</strong><br>
+                • Tous les médicaments en stock sont &gt; niveau de réapprovisionnement<br>
+                • Pour voir des alertes, modifiez les données de la BD (baissez UNITES_EN_STOCK ou augmentez NIVEAU_DE_REAPPRO)
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🔧 Étapes pour Tester Localement</h2>
+            <ol>
+                <li><strong>Modifiez les données :</strong> 
+                    <pre>UPDATE MEDICAMENT SET UNITES_EN_STOCK = 5 WHERE REFERENCE = 1;</pre>
+                    Cela baisse le stock du premier médicament pour déclencher une alerte.
+                </li>
+                <li><strong>Redémarrez l'application</strong> ou rechargez la page</li>
+                <li><strong>Cliquez sur le bouton ci-dessus</strong> pour déclencher l'envoi</li>
+                <li><strong>Vérifiez les logs de l'application</strong> pour les messages d'envoi</li>
+                <li><strong>Contrôlez Mailgun :</strong>
+                    <ul>
+                        <li>Allez sur <a href="https://app.mailgun.com" target="_blank">app.mailgun.com</a></li>
+                        <li>Sélectionnez votre domaine</li>
+                        <li>Onglet "Logs" pour voir l'historique des emails envoyés</li>
+                    </ul>
+                </li>
+            </ol>
+        </div>
+
+        <div class="section">
+            <h2>📞 Données Fournisseurs</h2>
+            <div id="suppliers" style="max-height: 300px; overflow-y: auto;">
+                <p style="color: #999; font-style: italic;">Chargement...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Charger les fournisseurs et catégories au chargement de la page
+        window.addEventListener('load', function() {
+            loadSuppliers();
+        });
+
+        function checkStock() {
+            const resultDiv = document.getElementById('result');
+            const resultContent = document.getElementById('resultContent');
+            
+            resultDiv.className = 'loading';
+            resultContent.innerHTML = '<div class="spinner"></div><p>Vérification du stock en cours...</p>';
+            resultDiv.style.display = 'block';
+
+            fetch('/api/approvisionnement/check-stock')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`Erreur HTTP: ${response.status}`);
+                    }
+                    return response.text();
+                })
+                .then(data => {
+                    resultDiv.className = 'success';
+                    resultContent.innerHTML = `
+                        <strong>✅ Succès !</strong><br>
+                        ${data}<br><br>
+                        <small>Vérifiez les logs de l'application et le tableau de bord Mailgun pour confirmer l'envoi des emails.</small>
+                    `;
+                })
+                .catch(error => {
+                    resultDiv.className = 'error';
+                    resultContent.innerHTML = `
+                        <strong>❌ Erreur !</strong><br>
+                        ${error.message}<br><br>
+                        <small>Vérifiez que l'application est en cours d'exécution sur http://localhost:8080</small>
+                    `;
+                });
+        }
+
+        function loadSuppliers() {
+            fetch('/api/categories')
+                .then(response => response.json())
+                .then(data => {
+                    let suppliersHTML = '<table style="width: 100%; border-collapse: collapse;">';
+                    suppliersHTML += '<tr style="background-color: #f0f0f0;"><th style="padding: 8px; border: 1px solid #ddd; text-align: left;">Catégorie</th><th style="padding: 8px; border: 1px solid #ddd; text-align: left;">Fournisseurs</th></tr>';
+                    
+                    if (data._embedded && data._embedded.categories) {
+                        data._embedded.categories.forEach(cat => {
+                            const suppliers = cat.fournisseurs && cat.fournisseurs.length > 0 
+                                ? cat.fournisseurs.map(f => `${f.nom} (${f.email})`).join(', ')
+                                : '<em>Aucun</em>';
+                            
+                            suppliersHTML += `<tr>
+                                <td style="padding: 8px; border: 1px solid #ddd;"><strong>${cat.libelle}</strong></td>
+                                <td style="padding: 8px; border: 1px solid #ddd;">${suppliers}</td>
+                            </tr>`;
+                        });
+                    }
+                    suppliersHTML += '</table>';
+                    document.getElementById('suppliers').innerHTML = suppliersHTML;
+                })
+                .catch(() => {
+                    document.getElementById('suppliers').innerHTML = 
+                        '<p style="color: #d9534f;">Impossible de charger les fournisseurs. Vérifiez que l\'application est en cours d\'exécution.</p>';
+                });
+        }
+    </script>
+</body>
+</html>

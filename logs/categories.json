@@ -1,0 +1,200 @@
+﻿{
+  "_embedded" : {
+    "categories" : [ {
+      "code" : 3,
+      "libelle" : "Antibiotiques",
+      "description" : "MÃ©dicaments pour traiter les infections bactÃ©riennes",
+      "fournisseurs" : [ {
+        "id" : 1,
+        "nom" : "Grossiste Alpha",
+        "email" : "emiliepuydarrieux+alpha@gmail.com",
+        "_links" : {
+          "categories" : {
+            "href" : "http://localhost:8080/api/categories/3"
+          }
+        }
+      } ],
+      "_links" : {
+        "self" : {
+          "href" : "http://localhost:8080/api/categories/3"
+        },
+        "categorie" : {
+          "href" : "http://localhost:8080/api/categories/3"
+        },
+        "medicaments" : {
+          "href" : "http://localhost:8080/api/categories/3/medicaments"
+        }
+      }
+    }, {
+      "code" : 4,
+      "libelle" : "Antihypertenseurs",
+      "description" : "MÃ©dicaments pour traiter l'hypertension artÃ©rielle",
+      "fournisseurs" : [ {
+        "id" : 2,
+        "nom" : "Pharmacie Centrale",
+        "email" : "emiliepuydarrieux+centrale@gmail.com",
+        "_links" : {
+          "categories" : {
+            "href" : "http://localhost:8080/api/categories/4"
+          }
+        }
+      } ],
+      "_links" : {
+        "self" : {
+          "href" : "http://localhost:8080/api/categories/4"
+        },
+        "categorie" : {
+          "href" : "http://localhost:8080/api/categories/4"
+        },
+        "medicaments" : {
+          "href" : "http://localhost:8080/api/categories/4/medicaments"
+        }
+      }
+    }, {
+      "code" : 5,
+      "libelle" : "AntidiabÃ©tiques",
+      "description" : "MÃ©dicaments pour traiter le diabÃ¨te",
+      "fournisseurs" : [ ],
+      "_links" : {
+        "self" : {
+          "href" : "http://localhost:8080/api/categories/5"
+        },
+        "categorie" : {
+          "href" : "http://localhost:8080/api/categories/5"
+        },
+        "medicaments" : {
+          "href" : "http://localhost:8080/api/categories/5/medicaments"
+        }
+      }
+    }, {
+      "code" : 6,
+      "libelle" : "Antihistaminiques",
+      "description" : "MÃ©dicaments pour traiter les allergies",
+      "fournisseurs" : [ ],
+      "_links" : {
+        "self" : {
+          "href" : "http://localhost:8080/api/categories/6"
+        },
+        "categorie" : {
+          "href" : "http://localhost:8080/api/categories/6"
+        },
+        "medicaments" : {
+          "href" : "http://localhost:8080/api/categories/6/medicaments"
+        }
+      }
+    }, {
+      "code" : 7,
+      "libelle" : "Vitamines et ComplÃ©ments",
+      "description" : "SupplÃ©ments nutritionnels",
+      "fournisseurs" : [ ],
+      "_links" : {
+        "self" : {
+          "href" : "http://localhost:8080/api/categories/7"
+        },
+        "categorie" : {
+          "href" : "http://localhost:8080/api/categories/7"
+        },
+        "medicaments" : {
+          "href" : "http://localhost:8080/api/categories/7/medicaments"
+        }
+      }
+    }, {
+      "code" : 8,
+      "libelle" : "MÃ©dicaments Cardiovasculaires",
+      "description" : "MÃ©dicaments pour le cÅur et la circulation",
+      "fournisseurs" : [ ],
+      "_links" : {
+        "self" : {
+          "href" : "http://localhost:8080/api/categories/8"
+        },
+        "categorie" : {
+          "href" : "http://localhost:8080/api/categories/8"
+        },
+        "medicaments" : {
+          "href" : "http://localhost:8080/api/categories/8/medicaments"
+        }
+      }
+    }, {
+      "code" : 9,
+      "libelle" : "MÃ©dicaments Gastro-intestinaux",
+      "description" : "MÃ©dicaments pour les troubles digestifs",
+      "fournisseurs" : [ ],
+      "_links" : {
+        "self" : {
+          "href" : "http://localhost:8080/api/categories/9"
+        },
+        "categorie" : {
+          "href" : "http://localhost:8080/api/categories/9"
+        },
+        "medicaments" : {
+          "href" : "http://localhost:8080/api/categories/9/medicaments"
+        }
+      }
+    }, {
+      "code" : 10,
+      "libelle" : "MÃ©dicaments Respiratoires",
+      "description" : "MÃ©dicaments pour les troubles respiratoires",
+      "fournisseurs" : [ ],
+      "_links" : {
+        "self" : {
+          "href" : "http://localhost:8080/api/categories/10"
+        },
+        "categorie" : {
+          "href" : "http://localhost:8080/api/categories/10"
+        },
+        "medicaments" : {
+          "href" : "http://localhost:8080/api/categories/10/medicaments"
+        }
+      }
+    }, {
+      "code" : 11,
+      "libelle" : "Antalgiques et AntipyrÃ©tiques",
+      "description" : "MÃ©dicaments contre la douleur et la fiÃ¨vre",
+      "fournisseurs" : [ ],
+      "_links" : {
+        "self" : {
+          "href" : "http://localhost:8080/api/categories/11"
+        },
+        "categorie" : {
+          "href" : "http://localhost:8080/api/categories/11"
+        },
+        "medicaments" : {
+          "href" : "http://localhost:8080/api/categories/11/medicaments"
+        }
+      }
+    }, {
+      "code" : 12,
+      "libelle" : "Anti-inflammatoires",
+      "description" : "MÃ©dicaments rÃ©duisant l inflammation",
+      "fournisseurs" : [ ],
+      "_links" : {
+        "self" : {
+          "href" : "http://localhost:8080/api/categories/12"
+        },
+        "categorie" : {
+          "href" : "http://localhost:8080/api/categories/12"
+        },
+        "medicaments" : {
+          "href" : "http://localhost:8080/api/categories/12/medicaments"
+        }
+      }
+    } ]
+  },
+  "_links" : {
+    "self" : {
+      "href" : "http://localhost:8080/api/categories?page=0&size=20"
+    },
+    "profile" : {
+      "href" : "http://localhost:8080/api/profile/categories"
+    },
+    "search" : {
+      "href" : "http://localhost:8080/api/categories/search"
+    }
+  },
+  "page" : {
+    "size" : 20,
+    "totalElements" : 10,
+    "totalPages" : 1,
+    "number" : 0
+  }
+}
